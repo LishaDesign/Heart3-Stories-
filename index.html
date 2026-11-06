@@ -38,11 +38,11 @@ h2{font-size:1.1rem;margin:24px 0 8px}
 @keyframes tw{0%,100%{opacity:1}50%{opacity:.4}}
 @media(prefers-reduced-motion:reduce){.bulb{animation:none}}
 .rootc{fill:var(--field);stroke:var(--wire);stroke-width:2}
-.node{cursor:pointer;outline:none}
-.node .ring{fill:var(--field);stroke:#9fb0f5;stroke-width:3;filter:url(#glow)}
-.node.on .ring,.node:focus-visible .ring{stroke:var(--sun);stroke-width:5}
+.fnode{cursor:pointer;outline:none}
+.fnode .ring{fill:var(--field);stroke:#9fb0f5;stroke-width:3;filter:url(#glow)}
+.fnode.on .ring,.node:focus-visible .ring{stroke:var(--sun);stroke-width:5}
 .lbl{fill:var(--ink);font:13px system-ui,-apple-system,sans-serif;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
-.node.on .lbl{font-weight:700}
+.fnode.on .lbl{font-weight:700}
 .emo{font-size:30px;text-anchor:middle}
 .emo.sm{font-size:22px}
 .star{fill:var(--sun);filter:url(#glow)}
@@ -131,8 +131,10 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
 .topr{display:flex;align-items:center;gap:8px;flex:none}
 .squig{display:inline-flex;align-items:center;justify-content:center;width:64px;height:52px;border-radius:12px;text-decoration:none}
 .squig svg{width:60px;height:52px;overflow:visible}
+.infobtn{width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font:italic 700 1.2rem Georgia,serif;display:grid;place-items:center;line-height:1}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="symdefs">
@@ -141,19 +143,29 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
 </defs></svg>
 <main>
   <noscript><div class="nojs"><b>This app needs to run in a web browser.</b> If you opened the saved file from the Files app, it only shows a plain preview. Open your app address in Safari instead (for example the lishadesign.github.io link), or tap the file and choose Open in Safari.</div></noscript>
-  <div class="top"><h1>Story dictation</h1><div class="topr"><a class="squig" href="doodle-creatures.html" title="Doodle creatures" aria-label="Doodle creatures"><svg viewBox="0 0 60 52" aria-hidden="true" focusable="false"><g fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8,40.6 C4.9,28.0 21.9,4.8 39.9,2.8 C40.8,11.0 38.3,18.7 37.7,23.1 C36.2,34.2 34.9,43.5 35.9,47.6 C39.3,46.6 46.7,32.7 47.5,25.4 C48.3,34.2 41.8,48.5 38.2,47.9 C45.2,45.1 51.4,37.3 57.2,35.0"/><path d="M4.9,41.2 C8.7,34.2 18.0,14.9 23.8,18.4 C25.8,24.2 16.5,37.3 12.1,39.7 C8.7,43.5 10.3,50.5 15.7,50.0 C22.7,49.4 34.3,34.2 37.7,23.1"/></g><ellipse cx="4.1" cy="40.8" rx="1.6" ry="1" fill="#fff" transform="rotate(25 4.1 40.8)"/></svg><span class="vh">Doodle creatures</span></a><button class="btn" id="helpbtn" aria-expanded="false" aria-controls="help">Help</button></div></div>
-  <p class="sub">Choose a story, then follow the glowing line from your first idea to a finished book.</p>
+  <div class="top"><h1>Story dictation</h1><div class="topr"><a class="squig" href="doodle-creatures.html" title="Doodle creatures" aria-label="Doodle creatures"><svg viewBox="0 0 60 52" aria-hidden="true" focusable="false"><g fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8,40.6 C4.9,28.0 21.9,4.8 39.9,2.8 C40.8,11.0 38.3,18.7 37.7,23.1 C36.2,34.2 34.9,43.5 35.9,47.6 C39.3,46.6 46.7,32.7 47.5,25.4 C48.3,34.2 41.8,48.5 38.2,47.9 C45.2,45.1 51.4,37.3 57.2,35.0"/><path d="M4.9,41.2 C8.7,34.2 18.0,14.9 23.8,18.4 C25.8,24.2 16.5,37.3 12.1,39.7 C8.7,43.5 10.3,50.5 15.7,50.0 C22.7,49.4 34.3,34.2 37.7,23.1"/></g><ellipse cx="4.1" cy="40.8" rx="1.6" ry="1" fill="#fff" transform="rotate(25 4.1 40.8)"/></svg><span class="vh">Doodle creatures</span></a><button class="btn infobtn" id="helpbtn" aria-expanded="false" aria-controls="help" aria-label="Info" title="Info">i</button></div></div>
 
-  <section class="panel helpbox" id="help" hidden aria-label="Help">
+  <section class="panel helpbox" id="help" hidden aria-label="Info">
     <h2 style="margin-top:0">How this app works</h2>
+    <p style="margin:0 0 6px">Choose a story, then follow the glowing line from your first idea to a finished book.</p>
     <ul>
       <li><b>The star:</b> Every story is a glowing firefly around the little star in the middle. Tap one to open it. <b>+ New story</b> adds one next to the star, and <b>+ Branch from this story</b> adds one that grows out from the story you are in.</li>
       <li><b>The six steps:</b> Under the star, follow the glowing line: <b>1 Ideas</b>, <b>2 Write and refine</b>, <b>3 Pages and illustrations</b>, <b>4 Review</b>, <b>5 Publish or print</b>, <b>6 Keep it safe</b>. Tap a step to open or close it. A step turns gold with a tick when it has something in it.</li>
       <li><b>Notes:</b> The <b>Notes</b> button in the corner of every step opens a notepad just for that step. A small gold dot shows when it has something written in it.</li>
-      <li><b>Ideas and dictating:</b> Choose your language near the top, then tap <b>Start dictating</b> in any step and speak. Save each idea, and add them to your draft when you are ready.</li>
+      <li><b>Ideas and dictating:</b> Choose your language near the top, then tap <b>Start dictating</b> in any step and speak. Save each idea, and add them to your draft when you are ready. While dictating you can say <b>full stop</b>, <b>comma</b>, <b>question mark</b>, <b>exclamation mark</b> or <b>new paragraph</b>, and the screen stays awake.</li>
       <li><b>Write and refine:</b> Dictate or type the whole story in the draft. <b>Read aloud</b> lets you hear it. Copy it into a chat with Claude to polish it, then paste the improved version back.</li>
       <li><b>Pages and illustrations:</b> <b>Split draft into pages</b> makes the pages for you. Then add an illustration to each page. You can put the writing over the picture, drag the box where you want it, and drag its round corner to change the size.</li>
       <li><b>Review and publish:</b> Choose the format and page colour, check the list, and tap <b>Preview book</b> to flip through the pages. Then tap <b>Export to publish</b> in step 5 to get a PDF for each format.</li>
+    </ul>
+    <h2>About each step</h2>
+    <ul>
+      <li><b>1. Ideas:</b> Dictate your story as it comes. The first thing you say is the start, and each part you save follows on in order. Your saved parts build up under <b>Your story so far</b>.</li>
+      <li><b>2. Write and refine:</b> Turn your ideas into the story. Dictate or type the whole story here, then polish it. Tip: copy your draft, paste it into a chat with Claude to polish it, then paste the improved version back.</li>
+      <li><b>3. Pages and illustrations:</b> Split your draft into pages, then add the writing and an illustration for each page.</li>
+      <li><b>4. Review:</b> Choose how the book will look, check the list, then preview it page by page.</li>
+      <li><b>5. Publish or print:</b> Make PDF files that are ready to publish or print. The format, page colour and title page are chosen in step 4. Print sizes: Square 8 x 8 in, Horizontal 9 x 6 in, Vertical 6 x 9 in. Pages are made at 200 dpi.</li>
+      <li><b>6. Keep it safe:</b> Save a story as a file to move it into a newer version of this app, or to keep a backup. Pages, illustrations and notes are included.</li>
+      <li><b>Language:</b> Switch the language between recordings if you mix Afrikaans and English.</li>
     </ul>
     <h2>Moving stories to a newer version of this app</h2>
     <p style="margin:0 0 6px">Your stories are saved inside this browser only, so a new version of the app won't see them until you move them across.</p>
@@ -191,7 +203,6 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
         <option value="en-GB">English (UK)</option>
         <option value="en-US">English (US)</option>
       </select>
-      <p class="sub sm" style="margin:6px 0 0">Switch the language between recordings if you mix Afrikaans and English.</p>
     </div>
 
     <ol class="timeline" id="timeline">
@@ -204,18 +215,19 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
           </div>
           <div class="stepnotes" hidden><label class="l" for="sn-ideas">Your notes for this step</label><textarea class="stnote short" id="sn-ideas" placeholder="Jot down reminders, questions or things to fix..."></textarea></div>
           <div class="stepbody" id="body-ideas" hidden>
-            <p class="sub sm">Catch ideas as they come. Speak or type, then save each one.</p>
-            <div class="row"><button class="btn primary" id="micIdea">Start dictating</button></div>
-            <div class="status" id="stIdea" role="status"></div>
-            <label class="l" for="idea">New idea</label>
-            <textarea id="idea" class="short"></textarea>
-            <div class="row">
-              <button class="btn primary" id="saveidea">Save idea</button>
-              <button class="btn" id="clearidea">Clear</button>
-            </div>
-            <h3>Saved ideas</h3>
+            <h3>Your story so far</h3>
             <div id="notes"></div>
             <div class="row"><button class="btn" id="copyall">Copy all ideas</button></div>
+            <h3>Now dictating</h3>
+            <div class="row"><button class="btn primary" id="micIdea">Start dictating</button></div>
+            <div class="status" id="stIdea" role="status"></div>
+            <label class="l" for="idea">Next part</label>
+            <textarea id="idea" class="short"></textarea>
+            <div class="row">
+              <button class="btn primary" id="saveidea2">Save and keep dictating</button>
+              <button class="btn" id="saveidea">Save and stop</button>
+              <button class="btn" id="clearidea">Clear</button>
+            </div>
           </div>
         </div>
       </li>
@@ -228,7 +240,6 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
           </div>
           <div class="stepnotes" hidden><label class="l" for="sn-write">Your notes for this step</label><textarea class="stnote short" id="sn-write" placeholder="Jot down reminders, questions or things to fix..."></textarea></div>
           <div class="stepbody" id="body-write" hidden>
-            <p class="sub sm">Turn your ideas into the story. Dictate or type the whole story here, then polish it.</p>
             <label class="l" for="author">Author name (shown on the title page)</label>
             <input type="text" id="author" class="fld" maxlength="60" placeholder="Your name">
             <div class="row">
@@ -244,7 +255,6 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
               <button class="btn" id="readaloud">Read aloud</button>
               <button class="btn" id="cleardraft">Clear draft</button>
             </div>
-            <p class="sub sm">Tip: copy your draft, paste it into a chat with Claude to polish it, then paste the improved version back here.</p>
           </div>
         </div>
       </li>
@@ -257,7 +267,6 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
           </div>
           <div class="stepnotes" hidden><label class="l" for="sn-pages">Your notes for this step</label><textarea class="stnote short" id="sn-pages" placeholder="Jot down reminders, questions or things to fix..."></textarea></div>
           <div class="stepbody" id="body-pages" hidden>
-            <p class="sub sm">Split your draft into pages, then add the writing and an illustration for each page.</p>
             <label class="l" for="splitmode">Split the draft</label>
             <select id="splitmode">
               <option value="para">At each blank line (paragraphs)</option>
@@ -315,7 +324,6 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
           </div>
           <div class="stepnotes" hidden><label class="l" for="sn-review">Your notes for this step</label><textarea class="stnote short" id="sn-review" placeholder="Jot down reminders, questions or things to fix..."></textarea></div>
           <div class="stepbody" id="body-review" hidden>
-            <p class="sub sm">Choose how the book will look, check the list, then preview it page by page.</p>
             <label class="l" for="pubfmt">Format</label>
             <select id="pubfmt">
               <option value="all">All three formats</option>
@@ -351,9 +359,7 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
           </div>
           <div class="stepnotes" hidden><label class="l" for="sn-publish">Your notes for this step</label><textarea class="stnote short" id="sn-publish" placeholder="Jot down reminders, questions or things to fix..."></textarea></div>
           <div class="stepbody" id="body-publish" hidden>
-            <p class="sub sm">Make PDF files that are ready to publish or print. The format, page colour and title page are chosen in step 4.</p>
             <p class="sum" id="pubsum"></p>
-            <p class="sub sm">Print sizes: Square 8 x 8 in, Horizontal 9 x 6 in, Vertical 6 x 9 in. Pages are made at 200 dpi.</p>
             <div class="row"><button class="btn primary" id="pubgo">Export to publish</button></div>
             <div class="status" id="pubstatus" role="status"></div>
             <div id="pubout"></div>
@@ -369,7 +375,7 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
           </div>
           <div class="stepnotes" hidden><label class="l" for="sn-backup">Your notes for this step</label><textarea class="stnote short" id="sn-backup" placeholder="Jot down reminders, questions or things to fix..."></textarea></div>
           <div class="stepbody" id="body-backup" hidden>
-            <p class="sub sm">Save a story as a file to move it into a newer version of this app, or to keep a backup. Pages, illustrations and notes are included.</p>
+            <p class="sub sm" id="bkinfo"></p>
             <div class="row">
               <button class="btn" id="expone">Export this story</button>
               <button class="btn" id="expall">Export all stories</button>
@@ -439,13 +445,38 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   im.src=url;
 
   // ---------- Storage ----------
-  function load(){try{var r=localStorage.getItem(KEY);if(r){var d=JSON.parse(r);if(d&&d.stories&&d.stories.length){S=d}}}catch(e){}
+  function load(){try{var r=localStorage.getItem(KEY);lastRaw=r;if(r){var d=JSON.parse(r);if(d&&d.stories&&d.stories.length){S=d}}}catch(e){try{localStorage.setItem(KEY+'-corrupt',localStorage.getItem(KEY))}catch(x){}}
     S.stories.forEach(function(s,i){if(!/^ff\d+$/.test(s.emoji||''))s.emoji='ff'+(i%FF.length)});
     S.stories.forEach(function(s){if(!s.pages||!s.pages.length){s.pages=[{text:s.text||'',img:''}];delete s.text}if(!(s.pg>=0))s.pg=0;if(!Array.isArray(s.notes))s.notes=[];s.draft=s.draft||'';s.author=s.author||'';s.idea=s.idea||'';if(!s.sn||typeof s.sn!=='object')s.sn={}});
     if(!Array.isArray(S.open))S.open=['ideas'];
     if(!S.stories.length){S.stories=[newStory('My first story')];S.active=S.stories[0].id}
     if(!cur())S.active=S.stories[0].id}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){status('Could not save. Storage may be full: try removing some illustrations.')}}
+  var lastRaw=null,saveT=0,dirty=false,seq=0,IDB=null,known={},hmap=new Map();
+  /* Images live in IndexedDB (big); localStorage keeps text plus 'idb:key' references (small). */
+  var idbP=new Promise(function(res){try{var r=indexedDB.open('storyboard-img',1);r.onupgradeneeded=function(){r.result.createObjectStore('i')};r.onsuccess=function(){res(r.result)};r.onerror=r.onblocked=function(){res(null)}}catch(e){res(null)}});
+  function hkey(v){var k=hmap.get(v);if(!k){var n=v.length,st=Math.max(1,Math.floor(n/4000)),h=2166136261,h2=5381,c;for(var i=0;i<n;i+=st){c=v.charCodeAt(i);h^=c;h=Math.imul(h,16777619);h2=(h2*33+c)|0}k='h'+(h>>>0).toString(36)+(h2>>>0).toString(36)+n.toString(36);hmap.set(v,k)}return k}
+  function strip(){var pend={},j=JSON.stringify(S,function(k,v){if(typeof v==='string'&&v.length>2000&&v.indexOf('data:image/')===0){var key=hkey(v);if(!known[key])pend[key]=v;return'idb:'+key}return v});return{j:j,pend:pend}}
+  function putAll(pend){return idbP.then(function(db){var ks=Object.keys(pend);if(!db)return false;return new Promise(function(res){var t=db.transaction('i','readwrite'),st=t.objectStore('i');ks.forEach(function(k){st.put(pend[k],k)});t.oncomplete=function(){ks.forEach(function(k){known[k]=1});res(true)};t.onerror=t.onabort=function(){res(false)}})})}
+  function writeLS(j){try{localStorage.setItem(KEY,j);lastRaw=j;return true}catch(e){return false}}
+  function fail(){status('NOT SAVED: storage is full. Export your stories in step 6, then remove some illustrations.');clearTimeout(stT)}
+  function inline(){try{var j=JSON.stringify(S);localStorage.setItem(KEY,j);lastRaw=j;return true}catch(e){return false}}
+  function doSave(sync){clearTimeout(saveT);dirty=false;S.ed=(S.ed||0)+1;var my=++seq,r=strip();
+    if(!Object.keys(r.pend).length){if(!writeLS(r.j))fail();return}
+    if(sync===true){inline();return}
+    putAll(r.pend).then(function(ok){if(my!==seq)return;if(ok){if(!writeLS(r.j))fail()}else if(!inline())fail()})}
+  function save(){dirty=true;clearTimeout(saveT);saveT=setTimeout(doSave,400)}
+  function hydrate(){return idbP.then(function(db){var refs=[];function w(o,k){var v=o[k];if(typeof v==='string'&&v.indexOf('idb:')===0)refs.push([o,k,v.slice(4)])}
+    S.stories.forEach(function(s){w(s,'img');(s.pages||[]).forEach(function(p){w(p,'img')})});
+    if(!refs.length)return;if(!db){refs.forEach(function(r){r[0][r[1]]=''});return}
+    return new Promise(function(res){var st=db.transaction('i').objectStore('i'),n=refs.length;refs.forEach(function(r){var q=st.get(r[2]);q.onsuccess=function(){var v=q.result;if(typeof v==='string'){r[0][r[1]]=v;known[r[2]]=1;hmap.set(v,r[2])}else r[0][r[1]]='';if(--n===0)res()};q.onerror=function(){r[0][r[1]]='';if(--n===0)res()}})})})}
+  function gc(){setTimeout(function(){idbP.then(function(db){if(!db)return;var st=db.transaction('i','readwrite').objectStore('i'),q=st.getAllKeys();q.onsuccess=function(){q.result.forEach(function(k){if(!known[k])st.delete(k)})}})},4000)}
+  function bkInfo(){var e=$('bkinfo');if(!e)return;e.textContent=S.lastX?'Last backup: '+new Date(S.lastX).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})+(S.ed?' · '+S.ed+' changes since.':' · nothing new since.'):'No backup yet. Tap Export all stories to make one.'}
+  function afterLoad(){if(lastRaw&&lastRaw.indexOf('data:image/')>=0)save();bkInfo();var n=S.ed||0;if((n>=20&&!S.lastX)||n>=40)status('Time for a backup: open step 6 and tap Export all stories.')}
+  window.addEventListener('pagehide',function(){if(dirty)doSave(true)});
+  function syncIn(){if(dirty||rec)return;var raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}if(raw&&raw!==lastRaw){load();hydrate().then(function(){renderAll();afterLoad()})}}
+  document.addEventListener('visibilitychange',function(){if(document.hidden){if(dirty)doSave()}else syncIn()});
+  window.addEventListener('pageshow',function(e){if(e.persisted)syncIn()});
+  window.addEventListener('storage',function(e){if(e.key===KEY)syncIn()});
   function newPage(){return{text:'',img:''}}
   function page(){var s=cur();if(s.pg>=s.pages.length)s.pg=s.pages.length-1;if(s.pg<0)s.pg=0;return s.pages[s.pg]}
   function newStory(t){return{id:'s'+Date.now()+Math.floor(Math.random()*1000),parent:null,title:t||'New story',emoji:'ff'+(S.stories.length%FF.length),img:'',pages:[newPage()],pg:0,notes:[],draft:'',author:'',idea:'',sn:{}}}
@@ -542,7 +573,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     el('polygon',{points:pts.join(' '),class:'cstar'},svg);
     S.stories.forEach(function(s,i){
       var c=pos[s.id],x=c.x,y=c.y,on=s.id===S.active;
-      var g=el('g',{class:'node'+(on?' on':''),role:'button',tabindex:0,'aria-label':s.title||'Untitled','aria-pressed':on?'true':'false'},svg);
+      var g=el('g',{class:'fnode'+(on?' on':''),role:'button',tabindex:0,'aria-label':s.title||'Untitled','aria-pressed':on?'true':'false'},svg);
       el('circle',{cx:x,cy:y,r:on?r*1.95:r*1.5,fill:on?'url(#haloG)':'url(#haloB)'},g);
       el('circle',{cx:x,cy:y,r:r,class:'ring'},g);
       if(s.img){var id='c'+i,cp=el('clipPath',{id:id},defs);el('circle',{cx:x,cy:y,r:r-3},cp);
@@ -559,18 +590,18 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
 
   function renderNotes(){
     var s=cur(),box=$('notes');box.textContent='';
-    if(!s.notes.length){var e=document.createElement('p');e.className='empty';e.textContent='No ideas saved yet. Speak or type one above and tap Save idea.';box.appendChild(e);return}
-    s.notes.forEach(function(n,i){
+    if(!s.notes.length){return}
+    for(var i=s.notes.length-1;i>=0;i--)(function(n,i){
       var d=document.createElement('div');d.className='note';
       var p=document.createElement('p');p.textContent=n.text;
-      var sm=document.createElement('small');sm.textContent=n.when;
+      var sm=document.createElement('small');sm.textContent='Part '+(s.notes.length-i)+(n.when?' · '+n.when:'');
       var r=document.createElement('div');r.className='row';
       var c=document.createElement('button');c.className='btn';c.textContent='Copy';c.onclick=function(){copy(n.text,'Idea copied.')};
       var u=document.createElement('button');u.className='btn';u.textContent='Add to draft';u.onclick=function(){s.draft=((s.draft||'').trim()?s.draft.trim()+'\n\n':'')+n.text;$('draft').value=s.draft;save();wcUpdate();renderSteps();status('Added to your draft.')};
-      var x=document.createElement('button');x.className='btn warn';x.textContent='Delete';x.onclick=function(){s.notes.splice(i,1);save();renderNotes();renderSteps()};
+      var x=document.createElement('button');x.className='btn warn';x.textContent='Delete';x.onclick=function(){if(!confirm('Delete this part?'))return;s.notes.splice(i,1);save();renderNotes();renderSteps()};
       r.appendChild(c);r.appendChild(u);r.appendChild(x);
       d.appendChild(sm);d.appendChild(p);d.appendChild(r);box.appendChild(d);
-    });
+    })(s.notes[i],i);
   }
   function renderPages(){
     var s=cur(),box=$('pgs');box.textContent='';page();
@@ -590,7 +621,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     if(window.speechSynthesis)speechSynthesis.cancel();$('readaloud').textContent='Read aloud';
     wcUpdate();renderPages();$('text').value=page().text;$('lang').value=S.lang;renderNotes();updateSum();
     Array.prototype.forEach.call(document.querySelectorAll('#emojis button'),function(b){b.setAttribute('aria-pressed',(!s.img&&s.emoji===b.dataset.v)?'true':'false')});
-    renderReview();renderSteps();
+    renderReview();renderSteps();bkInfo();
   }
   function renderAll(){renderBoard();renderEditor()}
 
@@ -656,11 +687,18 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   $('author').oninput=function(){cur().author=this.value;save();renderSteps()};
   $('draft').oninput=function(){cur().draft=this.value;save();wcUpdate();renderSteps()};
   $('idea').oninput=function(){cur().idea=this.value;save()};
-  $('saveidea').onclick=function(){
-    var s=cur(),t=$('idea').value.trim();if(!t){status('Nothing to save yet. Speak or type an idea first.');return}
-    s.notes.unshift({text:t,when:new Date().toLocaleString()});s.idea='';$('idea').value='';save();renderNotes();renderSteps();status('Idea saved.');
-  };
-  $('clearidea').onclick=function(){$('idea').value='';cur().idea='';save()};
+  function saveIdea(keep){
+    var s=cur(),t=$('idea').value.trim(),mb=$('micIdea'),live=!!(rec&&recUI&&recUI.btn===mb);
+    if(!t){status('Nothing to save yet. Speak or type something first.');return}
+    s.notes.unshift({text:t,when:new Date().toLocaleString()});s.idea='';$('idea').value='';
+    save();renderNotes();renderSteps();
+    if(live){killRec();if(keep)setTimeout(function(){mb._begin()},300)}
+    else if(keep)mb._begin();
+    status(keep?'Saved. Carry on dictating...':'Saved.');
+  }
+  $('saveidea').onclick=function(){saveIdea(false)};
+  $('saveidea2').onclick=function(){saveIdea(true)};
+  $('clearidea').onclick=function(){if($('idea').value.length>40&&!confirm('Clear this part without saving it?'))return;$('idea').value='';cur().idea='';save()};
   $('ideas2draft').onclick=function(){
     var s=cur();if(!s.notes.length){status('Save some ideas in step 1 first.');return}
     var add=s.notes.slice().reverse().map(function(n){return n.text}).join('\n\n');
@@ -672,7 +710,9 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     var b=this;if(!('speechSynthesis' in window)){status('Reading aloud is not supported in this browser.');return}
     if(speechSynthesis.speaking){speechSynthesis.cancel();b.textContent='Read aloud';return}
     var t=$('draft').value.trim();if(!t){status('Write or dictate your story first.');return}
-    var u=new SpeechSynthesisUtterance(t);u.lang=S.lang;u.onend=u.onerror=function(){b.textContent='Read aloud'};b.textContent='Stop reading';speechSynthesis.speak(u);
+    var ch=[],c2='';(t.match(/[^.!?\n]+[.!?]*\s*/g)||[t]).forEach(function(x){if(c2&&(c2+x).length>220){ch.push(c2);c2=x}else c2+=x});if(c2)ch.push(c2);
+    function rst(){b.textContent='Read aloud'}b.textContent='Stop reading';
+    ch.forEach(function(x,i){var u=new SpeechSynthesisUtterance(x);u.lang=S.lang;u.onerror=rst;if(i===ch.length-1)u.onend=rst;speechSynthesis.speak(u)});
   };
   function splitDraft(text,mode){
     text=String(text||'').replace(/\r/g,'').trim();if(!text)return[];
@@ -700,7 +740,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     var f=this.files&&this.files[0];this.value='';if(!f)return;
     var rd=new FileReader();
     rd.onload=function(){var img=new Image();img.onload=function(){
-      var m=160,sc=Math.min(1,m/Math.min(img.width,img.height)),w=img.width*sc,h=img.height*sc;
+      var m=640,sc=Math.min(1,m/Math.min(img.width,img.height)),w=img.width*sc,h=img.height*sc;
       var side=Math.min(w,h),c=document.createElement('canvas');c.width=c.height=Math.min(m,Math.round(side));
       var x=c.getContext('2d');x.drawImage(img,(img.width-side/sc)/2,(img.height-side/sc)/2,side/sc,side/sc,0,0,c.width,c.height);
       cur().img=c.toDataURL('image/jpeg',0.8);save();renderAll();status('Picture added.');
@@ -937,6 +977,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   function fname(t){return (String(t||'story').replace(/[^\w\-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40))||'story'}
   function okImg(v){return typeof v==='string'&&v.indexOf('data:image/')===0?v:''}
   function exportStories(list,name){
+    S.lastX=Date.now();S.ed=0;save();bkInfo();
     var json=JSON.stringify({format:'story-dictation',version:1,exported:new Date().toISOString(),note:'Exported from Story Dictation. Import this file in the app to restore the stories.',stories:list});
     function dl(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));a.download=name+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);status('Saved '+name+'.json to your downloads.')}
     try{var f=new File([json],name+'.json',{type:'application/json'});
@@ -971,16 +1012,16 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     };
     rd.readAsText(f);
   };
-  $('helpbtn').onclick=function(){var hp=$('help'),open=hp.hidden;hp.hidden=!open;this.setAttribute('aria-expanded',open?'true':'false');this.textContent=open?'Close help':'Help';if(open)hp.scrollIntoView({behavior:'smooth',block:'start'})};
+  $('helpbtn').onclick=function(){var hp=$('help'),open=hp.hidden;hp.hidden=!open;this.setAttribute('aria-expanded',open?'true':'false');this.textContent=open?'×':'i';this.setAttribute('aria-label',open?'Close info':'Info');if(open)hp.scrollIntoView({behavior:'smooth',block:'start'})};
   $('uploadpg').onclick=function(){$('filepg').click()};
   $('removepg').onclick=function(){page().img='';save();renderPages()};
   $('filepg').onchange=function(){
     var f=this.files&&this.files[0];this.value='';if(!f)return;var s=cur(),pg=page();
     var rd=new FileReader();
     rd.onload=function(){var img=new Image();img.onload=function(){
-      var sc=Math.min(1,800/Math.max(img.width,img.height)),c=document.createElement('canvas');
+      var sc=Math.min(1,1600/Math.max(img.width,img.height)),c=document.createElement('canvas');
       c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      pg.img=c.toDataURL('image/jpeg',0.72);save();if(cur()===s)renderPages();status('Illustration added.');
+      pg.img=c.toDataURL('image/jpeg',0.82);save();if(cur()===s)renderPages();status('Illustration added.');
     };img.onerror=function(){status('That file could not be read as a picture.')};img.src=rd.result};
     rd.readAsDataURL(f);
   };
@@ -992,7 +1033,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   $('title').oninput=function(){var s=cur();s.title=this.value;save();renderBoard()};
   $('text').oninput=function(){page().text=this.value;save();ovSched()};
   $('lang').onchange=function(){S.lang=this.value;save();if(rec)stop()};
-  $('clear').onclick=function(){$('text').value='';page().text='';save();status('Text cleared.')};
+  $('clear').onclick=function(){if($('text').value.length>40&&!confirm('Clear the text on this page?'))return;$('text').value='';page().text='';save();status('Text cleared.')};
   $('copy').onclick=function(){copy($('text').value,'Text copied.')};
   $('copyall').onclick=function(){
     var s=cur();if(!s.notes.length){status('No ideas to copy yet.');return}
@@ -1014,27 +1055,44 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
 
   // ---------- Dictation ----------
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,base='',recUI=null;
-  function micOff(){if(recUI){recUI.btn.textContent='Start dictating';recUI.btn.className='btn primary';if(/^Listening/.test(recUI.st.textContent))recUI.st.textContent='';recUI=null}}
+  function micOff(){wake(false);if(recUI){recUI.btn.textContent='Start dictating';recUI.btn.className='btn primary';if(/^Listening/.test(recUI.st.textContent))recUI.st.textContent='';recUI=null}}
+  function tidy(t){
+    return t.replace(/\s*\bnew paragraph\b[.,]?\s*/gi,'\n\n').replace(/\s*\bnew line\b[.,]?\s*/gi,'\n')
+      .replace(/\s*\bfull stop\b/gi,'.').replace(/\s*\bquestion mark\b/gi,'?').replace(/\s*\bexclamation (mark|point)\b/gi,'!')
+      .replace(/\s*\bcomma\b/gi,',').replace(/([.?!])\s+([a-z])/g,function(m,a,b){return a+' '+b.toUpperCase()});
+  }
+  function capStart(base,v){return(!base.trim()||/[.?!]\s*$/.test(base)||/\n\s*$/.test(base))?v.replace(/^(\s*)([a-z])/,function(m,a,b){return a+b.toUpperCase()}):v}
+  /* Keep the screen awake while dictating so the phone does not cut the microphone off */
+  var wl=null;
+  function wake(on){try{if(on){if(navigator.wakeLock&&!wl)navigator.wakeLock.request('screen').then(function(l){wl=l;l.onrelease=function(){wl=null}}).catch(function(){})}else if(wl){wl.release();wl=null}}catch(e){}}
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&rec)wake(true)});
   function stop(){if(rec){var r=rec;rec=null;try{r.stop()}catch(e){}}micOff()}
+  function killRec(){if(rec){var r=rec;rec=null;r._dead=true;try{r.abort()}catch(e){try{r.stop()}catch(x){}}}micOff()}
   function setupMic(btn,ta,st,onText){
-    btn.onclick=function(){
-      if(rec){var same=recUI&&recUI.btn===btn;stop();if(same)return}
+    function begin(){
       if(!SR){st.textContent='Dictation is not supported in this browser. Try Safari on iPhone or Chrome on Android.';return}
       var r=new SR();r.lang=S.lang;r.continuous=true;r.interimResults=true;
       base=ta.value;if(base&&!/\s$/.test(base))base+=' ';
       r.onresult=function(e){
+        if(r._dead)return;
         var fin='',tmp='';
         for(var i=0;i<e.results.length;i++){var t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=t;else tmp+=t}
-        var v=base+fin+tmp;ta.value=v;onText(v);
+        var v=base+tidy(capStart(base,fin+tmp));ta.value=v;ta.scrollTop=ta.scrollHeight;onText(v);
       };
       r.onerror=function(e){
+        if(r._dead)return;
         st.textContent=e.error==='not-allowed'?'Microphone is blocked. Allow microphone access for this page and try again.':'Dictation stopped: '+e.error+'.';
         if(e.error!=='no-speech'&&e.error!=='aborted'){rec=null;try{r.stop()}catch(x){}micOff()}
       };
-      r.onend=function(){if(rec===r){base=ta.value;if(base&&!/\s$/.test(base))base+=' ';try{r.start()}catch(x){rec=null;micOff()}}};
+      r.onend=function(){if(r._dead)return;if(rec===r){base=ta.value;if(base&&!/\s$/.test(base))base+=' ';try{r.start()}catch(x){rec=null;micOff()}}};
       rec=r;
-      try{r.start();recUI={btn:btn,st:st};btn.textContent='Stop dictating';btn.className='btn rec';st.textContent='Listening in '+$('lang').selectedOptions[0].text+'...'}
+      try{r.start();recUI={btn:btn,st:st};wake(true);btn.textContent='Stop dictating';btn.className='btn rec';st.textContent='Listening in '+$('lang').selectedOptions[0].text+'...'}
       catch(x){rec=null;st.textContent='Could not start the microphone.'}
+    }
+    btn._begin=function(){if(rec)stop();begin()};
+    btn.onclick=function(){
+      if(rec){var same=recUI&&recUI.btn===btn;stop();if(same)return}
+      begin();
     };
   }
   setupMic($('micIdea'),$('idea'),$('stIdea'),function(v){cur().idea=v;save()});
@@ -1044,9 +1102,11 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   $('addroot').onclick=function(){addStory(null)};
   $('addbranch').onclick=function(){addStory(S.active)};
 
-  load();renderAll();
+  load();hydrate().then(function(){renderAll();afterLoad();gc()});
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
   try{if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0)}catch(e){}
 })();
 </script>
+<script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})</script>
 </body>
 </html>

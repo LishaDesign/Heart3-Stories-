@@ -24,7 +24,7 @@
 html{background:var(--paper-deep)}
 html,body{margin:0}
 body{
-  min-height:100vh;color:var(--ink);font:16px/1.5 var(--serif);
+  min-height:100vh;min-height:100dvh;color:var(--ink);font:16px/1.5 var(--serif);
   background:radial-gradient(130% 90% at 50% 0%,#fffdf8 0%,var(--paper) 60%,var(--paper-deep) 100%);
   padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
 }
@@ -87,7 +87,7 @@ body.picking .toast{bottom:calc(140px + env(safe-area-inset-bottom))}
 .empty-msg{grid-column:1/-1;padding:18px 4px;color:var(--ink-soft)}
 
 /* detail sheet */
-dialog{width:min(560px,calc(100% - 20px));max-height:94vh;overflow:auto;border:0;border-radius:28px;padding:14px 14px 18px;background:var(--paper-light);color:var(--ink);box-shadow:0 0 0 2px var(--ink),0 18px 50px rgba(30,18,6,.5)}
+dialog{width:min(560px,calc(100% - 20px));max-height:94vh;max-height:94dvh;overflow:auto;border:0;border-radius:28px;padding:14px 14px 18px;background:var(--paper-light);color:var(--ink);box-shadow:0 0 0 2px var(--ink),0 18px 50px rgba(30,18,6,.5)}
 dialog::backdrop{background:rgba(40,25,10,.58)}
 .dnav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .dnav .pos{font:.85rem var(--sans);color:var(--ink-soft)}
@@ -123,6 +123,7 @@ body.dragging{touch-action:none;overscroll-behavior:none}
 .dragclone .card{box-shadow:0 0 0 3px var(--ink)}
 body.dragging{cursor:grabbing}
 </style>
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 <main>
@@ -203,7 +204,11 @@ body.dragging{cursor:grabbing}
     S.names=d.names||{};S.stories=d.stories||{};S.added=d.added||[];S.removed=d.removed||[];S.books=d.books||[];S.lang=d.lang||'en-ZA';S.order=Array.isArray(d.order)?d.order:[]}}}catch(e){}
 
   var tt;function toast(m){var t=$('toast');t.textContent=m;clearTimeout(tt);tt=setTimeout(function(){t.textContent=''},3200)}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){toast('Could not save. Storage may be full: try removing an added doodle.');return false}}
+  var saveT=0,dirty=false;
+  function doSave(){clearTimeout(saveT);dirty=false;try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){toast('NOT SAVED: storage is full. Try removing an added doodle.');return false}}
+  function save(){dirty=true;clearTimeout(saveT);saveT=setTimeout(doSave,400);return true}
+  window.addEventListener('pagehide',function(){if(dirty)doSave()});
+  document.addEventListener('visibilitychange',function(){if(document.hidden&&dirty)doSave()});
 
   function all(){
     var a=SEED.filter(function(c){return S.removed.indexOf(c.id)<0}).concat(S.added);
@@ -231,7 +236,7 @@ body.dragging{cursor:grabbing}
     list.forEach(function(c){
       var li=document.createElement('li'),b=document.createElement('button');
       b.className='card';b.type='button';b.setAttribute('data-id',c.id);
-      var im=document.createElement('img');im.src=c.img;im.alt='';im.decoding='async';
+      var im=document.createElement('img');im.src=srcOf(c);im.alt='';im.decoding='async';im.loading='lazy';
       var nm=document.createElement('span'),has=hasName(c);
       nm.className='nm'+(has?'':' empty');nm.textContent=has?nameOf(c):'name me';
       b.appendChild(im);b.appendChild(nm);
@@ -366,6 +371,15 @@ body.dragging{cursor:grabbing}
   function inBook(id){return S.books.some(function(b){return b.ids.indexOf(id)>=0})}
   function joinNames(n){if(n.length<=1)return n[0]||'';if(n.length===2)return n[0]+' and '+n[1];if(n.length===3)return n[0]+', '+n[1]+' and '+n[2];return n[0]+', '+n[1]+' and '+(n.length-2)+' more'}
   function readSB(){try{var r=localStorage.getItem(SB);if(r){var d=JSON.parse(r);if(d&&Array.isArray(d.stories))return d}}catch(e){}return{stories:[],active:null,lang:'en-ZA'}}
+  var BU={},SMALL={};
+  function srcOf(c){if(BU[c.id])return BU[c.id];try{var s=c.img,m=/^data:([^;,]+)/.exec(s),bin=atob(s.slice(s.indexOf(',')+1)),u=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);return BU[c.id]=URL.createObjectURL(new Blob([u],{type:m?m[1]:'image/jpeg'}))}catch(e){return c.img}}
+  function shrink(src,max,sq,q,cb){var i=new Image();i.onload=function(){var side=Math.min(i.width,i.height),sc=Math.min(1,max/(sq?side:Math.max(i.width,i.height))),c=document.createElement('canvas'),x=c.getContext('2d');
+    if(sq){c.width=c.height=Math.round(side*sc);x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,(i.width-side)/2,(i.height-side)/2,side,side,0,0,c.width,c.height)}
+    else{c.width=Math.round(i.width*sc);c.height=Math.round(i.height*sc);x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height)}
+    try{cb(c.toDataURL('image/jpeg',q))}catch(e){cb(null)}};i.onerror=function(){cb(null)};i.src=src}
+  function warm(){all().forEach(function(c){if(SMALL[c.id])return;var o=SMALL[c.id]={};shrink(srcOf(c),800,false,.72,function(u){o.pg=u});shrink(srcOf(c),640,true,.85,function(u){o.cv=u})})}
+  function pgImg(c){return(SMALL[c.id]&&SMALL[c.id].pg)||c.img}
+  function pruneBooks(){var d=readSB(),ids={};d.stories.forEach(function(x){ids[x.id]=1});var n=S.books.length;S.books=S.books.filter(function(b){return ids[b.sid]});if(S.books.length!==n){save();render()}}
   var bkn=0;
   function makeBook(ids,quiet){
     var items=ids.map(byId).filter(Boolean);if(!items.length)return null;
@@ -374,8 +388,8 @@ body.dragging{cursor:grabbing}
     var names=items.map(nameOf).map(function(x){return x.trim()}).filter(Boolean);
     var title=(names.length?joinNames(names):'Doodle book').slice(0,60);
     var d=readSB();
-    var st={id:'s'+Date.now()+(bkn++)+Math.floor(Math.random()*1000),parent:null,title:title,emoji:'ff'+(d.stories.length%6),img:items[0].img,
-      pages:items.map(function(c){return{text:storyOf(c).trim(),img:c.img}}),pg:0,notes:[],
+    var st={id:'s'+Date.now()+(bkn++)+Math.floor(Math.random()*1000),parent:null,title:title,emoji:'ff'+(d.stories.length%6),img:(SMALL[items[0].id]&&SMALL[items[0].id].cv)||pgImg(items[0]),
+      pages:items.map(function(c){return{text:storyOf(c).trim(),img:pgImg(c)}}),pg:0,notes:[],
       draft:items.map(storyOf).map(function(x){return x.trim()}).filter(Boolean).join('\n\n'),author:'',idea:'',sn:{}};
     d.stories.push(st);d.active=st.id;
     try{localStorage.setItem(SB,JSON.stringify(d))}catch(e){toast('Could not make the book. Storage may be full.');return null}
@@ -421,7 +435,7 @@ body.dragging{cursor:grabbing}
   function idx(){var a=all();for(var i=0;i<a.length;i++)if(a[i].id===curId)return i;return 0}
   function fill(){
     var c=byId(curId),a=all();if(!c)return;
-    $('dimg').src=c.img;
+    $('dimg').src=srcOf(c);
     $('dimg').alt=hasName(c)?'Doodle of '+nameOf(c):'Doodle creature';
     $('nm').value=nameOf(c);$('story').value=storyOf(c);$('lang').value=S.lang;
     $('pos').textContent=(idx()+1)+' of '+a.length;
@@ -445,11 +459,11 @@ body.dragging{cursor:grabbing}
   $('del').addEventListener('click',function(){
     var c=byId(curId);if(!c)return;
     var nm=nameOf(c).trim();
-    if(!window.confirm('Delete '+(nm?'\u201c'+nm+'\u201d':'this doodle')+' from the page? Its name and rough story go too.'))return;
+    var isAdd=S.added.some(function(x){return x.id===curId});if(!window.confirm('Delete '+(nm?'\u201c'+nm+'\u201d':'this doodle')+' from the page? '+(isAdd?'Its name and rough story go too.':'You can bring it back later with its name and story.')))return;
     var id=curId,i=idx();
     if(S.added.some(function(x){return x.id===id}))S.added=S.added.filter(function(x){return x.id!==id});
     else if(S.removed.indexOf(id)<0)S.removed.push(id);
-    delete S.names[id];delete S.stories[id];
+    if(isAdd){delete S.names[id];delete S.stories[id]}
     SEL=SEL.filter(function(x){return x!==id});
     save();
     var b=all();curId=b.length?b[Math.min(i,b.length-1)].id:null;closeD();toast('Doodle deleted.');
@@ -552,7 +566,11 @@ body.dragging{cursor:grabbing}
   });
 
   render();
+  setTimeout(function(){pruneBooks();warm()},1200);
+  window.addEventListener('pageshow',function(e){if(e.persisted)pruneBooks()});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)pruneBooks()});
 })();
 </script>
+<script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})</script>
 </body>
 </html>
