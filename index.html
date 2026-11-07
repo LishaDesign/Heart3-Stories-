@@ -787,7 +787,6 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     if(pm){closeParas();return}
     if(rec)stop();pm=true;$('draft').hidden=true;$('paras').hidden=false;this.textContent='Back to full draft';this.setAttribute('aria-expanded','true');renderParas();
   };
-  var _mic=$('micDraft').onclick;$('micDraft').onclick=function(){if(pm)closeParas();_mic.call(this)};
   function cleanSN(o){var r={};STEPS.forEach(function(k){if(o&&typeof o==='object'&&typeof o[k]==='string')r[k]=o[k].slice(0,5000)});return r}
 
   // ---------- Icons ----------
@@ -1140,7 +1139,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
       };
       r.onerror=function(e){
         if(r._dead)return;
-        st.textContent=e.error==='not-allowed'?'Microphone is blocked. Allow microphone access for this page and try again.':'Dictation stopped: '+e.error+'.';
+        st.textContent=(e.error==='not-allowed'||e.error==='service-not-allowed')?'Microphone or speech recognition is blocked. Allow the microphone (and Siri & Dictation on iPhone) for this page and try again.':e.error==='network'?'Dictation needs an internet connection.':e.error==='language-not-supported'?'That language is not available for dictation on this device.':'Dictation stopped: '+e.error+'.';
         if(e.error!=='no-speech'&&e.error!=='aborted'){rec=null;try{r.stop()}catch(x){}micOff()}
       };
       r.onend=function(){if(r._dead)return;if(rec===r){base=ta.value;if(base&&!/\s$/.test(base))base+=' ';try{r.start()}catch(x){rec=null;micOff()}}};
@@ -1157,6 +1156,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   setupMic($('micIdea'),$('idea'),$('stIdea'),function(v){cur().idea=v;save()});
   setupMic($('micDraft'),$('draft'),$('stDraft'),function(v){cur().draft=v;save();wcUpdate()});
   setupMic($('micPage'),$('text'),$('stPage'),function(v){page().text=v;save();ovSched()});
+  (function(){var o=$('micDraft').onclick;$('micDraft').onclick=function(){if(pm)closeParas();o.call(this)}})();
 
   $('addroot').onclick=function(){addStory(null)};
   $('addbranch').onclick=function(){addStory(S.active)};
