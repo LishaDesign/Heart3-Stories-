@@ -132,6 +132,8 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
 .squig{display:inline-flex;align-items:center;justify-content:center;width:64px;height:52px;border-radius:12px;text-decoration:none}
 .squig svg{width:60px;height:52px;overflow:visible}
 .infobtn{width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font:italic 700 1.2rem Georgia,serif;display:grid;place-items:center;line-height:1}
+.pcard{border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0;background:var(--field)}
+.pcard textarea{min-height:90px;margin-bottom:6px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
@@ -160,7 +162,7 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
     <h2>About each step</h2>
     <ul>
       <li><b>1. Ideas:</b> Dictate your story as it comes. The first thing you say is the start, and each part you save follows on in order. Your saved parts build up under <b>Your story so far</b>.</li>
-      <li><b>2. Write and refine:</b> Turn your ideas into the story. Dictate or type the whole story here, then polish it. Tip: copy your draft, paste it into a chat with Claude to polish it, then paste the improved version back.</li>
+      <li><b>2. Write and refine:</b> Turn your ideas into the story. Dictate or type the whole story here, then polish it. Use <b>Tidy up</b> to fix capital letters, spacing, repeated words, “um” and “uh” and missing full stops (<b>Undo</b> brings your old version back). <b>Edit by paragraph</b> lets you fix, move, join or delete one paragraph at a time. For a deeper polish, tap <b>Copy for Claude</b>, paste it into a chat with Claude, then paste the improved story back into the draft.</li>
       <li><b>3. Pages and illustrations:</b> Split your draft into pages, then add the writing and an illustration for each page.</li>
       <li><b>4. Review:</b> Choose how the book will look, check the list, then preview it page by page.</li>
       <li><b>5. Publish or print:</b> Make PDF files that are ready to publish or print. The format, page colour and title page are chosen in step 4. Print sizes: Square 8 x 8 in, Horizontal 9 x 6 in, Vertical 6 x 9 in. Pages are made at 200 dpi.</li>
@@ -255,6 +257,14 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
               <button class="btn" id="readaloud">Read aloud</button>
               <button class="btn" id="cleardraft">Clear draft</button>
             </div>
+            <h3>Refine</h3>
+            <div class="row">
+              <button class="btn primary" id="tidy">Tidy up</button>
+              <button class="btn" id="undodraft" disabled>Undo</button>
+              <button class="btn" id="paraedit" aria-expanded="false">Edit by paragraph</button>
+              <button class="btn" id="copyclaude">Copy for Claude</button>
+            </div>
+            <div id="paras" hidden></div>
           </div>
         </div>
       </li>
@@ -619,7 +629,7 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   function renderEditor(){
     var s=cur();pic($('bigpic'),s);$('title').value=s.title;$('author').value=s.author||'';$('draft').value=s.draft||'';$('idea').value=s.idea||'';
     if(window.speechSynthesis)speechSynthesis.cancel();$('readaloud').textContent='Read aloud';
-    wcUpdate();renderPages();$('text').value=page().text;$('lang').value=S.lang;renderNotes();updateSum();
+    wcUpdate();$('undodraft').disabled=typeof s.prevDraft!=='string';if(pm)renderParas();renderPages();$('text').value=page().text;$('lang').value=S.lang;renderNotes();updateSum();
     Array.prototype.forEach.call(document.querySelectorAll('#emojis button'),function(b){b.setAttribute('aria-pressed',(!s.img&&s.emoji===b.dataset.v)?'true':'false')});
     renderReview();renderSteps();bkInfo();
   }
@@ -729,6 +739,55 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
     var first=s.pages.length;parts.forEach(function(t){var np=newPage();np.text=t;s.pages.push(np)});
     s.pg=first;save();renderEditor();status('Added '+parts.length+' pages. Now add an illustration to each one.');
   };
+
+  // ---------- Refine the draft ----------
+  var pm=false;
+  function setDraft(v){var s=cur();s.prevDraft=s.draft||'';s.draft=v;$('draft').value=v;save();wcUpdate();renderSteps();$('undodraft').disabled=false}
+  function tidyText(t){
+    return String(t||'').replace(/\r/g,'').split(/\n\s*\n/).map(function(p){
+      p=p.replace(/\s*\n\s*/g,' ').replace(/\b(?:um+|uh+|er+|erm|hmm+)\b[,.]?\s*/gi,'').replace(/\b(\w+)(?:\s+\1\b)+/gi,'$1')
+        .replace(/[ \t]+/g,' ').replace(/\s+([.,!?;:])/g,'$1').replace(/\bi\b(?=[\s',.!?]|$)/g,'I').trim();
+      if(!p)return '';
+      p=p.replace(/(^|[.!?]\s+)([a-z])/g,function(m,a,b){return a+b.toUpperCase()});
+      if(!/[.!?\u2026"\u201d\u2019)]$/.test(p))p+='.';
+      return p;
+    }).filter(Boolean).join('\n\n');
+  }
+  $('tidy').onclick=function(){
+    var s=cur(),t=(s.draft||'').trim();if(!t){status('Write or dictate your story first.');return}
+    var n=tidyText(t);if(n===t){status('Nothing to tidy. It already looks neat.');return}
+    setDraft(n);if(pm)renderParas();status('Tidied up. Tap Undo if you do not like it.');
+  };
+  $('undodraft').onclick=function(){var s=cur();if(typeof s.prevDraft!=='string')return;var c=s.draft||'';s.draft=s.prevDraft;s.prevDraft=c;$('draft').value=s.draft;save();wcUpdate();renderSteps();if(pm)renderParas();status('Undone. Tap Undo again to go forward.')};
+  $('copyclaude').onclick=function(){
+    var t=($('draft').value||'').trim();if(!t){status('Write or dictate your story first.');return}
+    copy("Please polish this children's story. Keep my voice, the same events and any Afrikaans words. Fix spelling, grammar and punctuation, and smooth any awkward sentences. Keep the blank lines between paragraphs so I can split it into pages. Reply with only the improved story.\n\n"+t,'Copied with instructions. Paste it into Claude.');
+  };
+  function parts(){return (cur().draft||'').split(/\n\s*\n/).map(function(x){return x.trim()}).filter(Boolean)}
+  function putParts(a){var s=cur();s.prevDraft=s.draft||'';s.draft=a.join('\n\n');$('draft').value=s.draft;save();wcUpdate();renderSteps();$('undodraft').disabled=false}
+  function renderParas(){
+    var box=$('paras'),a=parts();box.textContent='';
+    if(!a.length){var e=document.createElement('p');e.className='empty';e.textContent='No story yet.';box.appendChild(e)}
+    a.forEach(function(t,i){
+      var d=document.createElement('div');d.className='pcard';
+      var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('aria-label','Paragraph '+(i+1));
+      ta.oninput=function(){var cp=parts();cp[i]=this.value;var s=cur();s.draft=cp.join('\n\n');$('draft').value=s.draft;save();wcUpdate();renderSteps()};
+      d.appendChild(ta);
+      var r=document.createElement('div');r.className='row';r.style.margin='0';
+      function B(l,fn,dis,w){var b=document.createElement('button');b.className='btn'+(w?' warn':'');b.textContent=l;b.disabled=!!dis;b.onclick=function(){var cp=parts();fn(cp);putParts(cp);renderParas()};r.appendChild(b)}
+      B('Up',function(c){var x=c[i];c[i]=c[i-1];c[i-1]=x},i===0);
+      B('Down',function(c){var x=c[i];c[i]=c[i+1];c[i+1]=x},i===a.length-1);
+      B('Join with next',function(c){c.splice(i,2,c[i]+' '+c[i+1])},i===a.length-1);
+      B('Delete',function(c){c.splice(i,1)},false,true);
+      d.appendChild(r);box.appendChild(d);
+    });
+  }
+  function closeParas(){pm=false;$('paras').hidden=true;$('draft').hidden=false;$('paraedit').textContent='Edit by paragraph';$('paraedit').setAttribute('aria-expanded','false')}
+  $('paraedit').onclick=function(){
+    if(pm){closeParas();return}
+    if(rec)stop();pm=true;$('draft').hidden=true;$('paras').hidden=false;this.textContent='Back to full draft';this.setAttribute('aria-expanded','true');renderParas();
+  };
+  var _mic=$('micDraft').onclick;$('micDraft').onclick=function(){if(pm)closeParas();_mic.call(this)};
   function cleanSN(o){var r={};STEPS.forEach(function(k){if(o&&typeof o==='object'&&typeof o[k]==='string')r[k]=o[k].slice(0,5000)});return r}
 
   // ---------- Icons ----------
