@@ -135,6 +135,30 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
 .pcard{border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0;background:var(--field)}
 .pcard textarea{min-height:90px;margin-bottom:6px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.tipsbtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 12px;border-radius:12px;font:600 .9rem system-ui,-apple-system,sans-serif}
+.tipsbtn svg{width:18px;height:18px;flex:none}
+#tipsdlg{width:min(640px,calc(100% - 16px));max-height:92vh;max-height:92dvh;overflow:auto;border:1px solid var(--line);border-radius:18px;padding:14px 14px 18px;background:#0b1659;color:var(--ink);box-shadow:0 0 40px rgba(110,140,255,.3)}
+#tipsdlg::backdrop{background:rgba(3,8,34,.78)}
+#tipsdlg h2{margin:0;font-size:1.25rem;font-style:italic}
+.tphead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.tpsub{color:var(--mute);font:.88rem system-ui,sans-serif;margin:0 0 10px}
+.tpbox{border:1px solid var(--line);border-radius:14px;padding:10px;margin:10px 0;background:var(--field)}
+.tpbox h3{margin:0 0 6px}
+.tpbox textarea{min-height:110px}
+.tpbox .fld{margin-bottom:6px}
+.tpchips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tpchips button{min-height:38px;padding:4px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font:.85rem system-ui,sans-serif}
+.tpchips button[aria-pressed="true"]{border-color:var(--sun);box-shadow:0 0 0 2px var(--sun)}
+.tplist{list-style:none;margin:0;padding:0}
+.tpitem{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:rgba(16,32,106,.8)}
+.tpitem p{margin:0 0 6px;white-space:pre-wrap}
+.tpmeta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font:.8rem system-ui,sans-serif;color:var(--mute)}
+.tpmeta a{color:var(--sun);word-break:break-all}
+.tpmeta .btn{min-height:34px;padding:2px 10px;font-size:.8rem}
+.tpmeta .sp{margin-left:auto}
+.tptag{display:inline-block;padding:1px 8px;border-radius:999px;border:1px solid var(--line);font:.72rem system-ui,sans-serif}
+.tpstat{min-height:1.3em;color:var(--mute);font:.88rem system-ui,sans-serif;margin:4px 0}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 </head>
@@ -145,7 +169,7 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
 </defs></svg>
 <main>
   <noscript><div class="nojs"><b>This app needs to run in a web browser.</b> If you opened the saved file from the Files app, it only shows a plain preview. Open your app address in Safari instead (for example the lishadesign.github.io link), or tap the file and choose Open in Safari.</div></noscript>
-  <div class="top"><h1>Story dictation</h1><div class="topr"><a class="squig" href="doodle-creatures.html" title="Doodle creatures" aria-label="Doodle creatures"><svg viewBox="0 0 60 52" aria-hidden="true" focusable="false"><g fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8,40.6 C4.9,28.0 21.9,4.8 39.9,2.8 C40.8,11.0 38.3,18.7 37.7,23.1 C36.2,34.2 34.9,43.5 35.9,47.6 C39.3,46.6 46.7,32.7 47.5,25.4 C48.3,34.2 41.8,48.5 38.2,47.9 C45.2,45.1 51.4,37.3 57.2,35.0"/><path d="M4.9,41.2 C8.7,34.2 18.0,14.9 23.8,18.4 C25.8,24.2 16.5,37.3 12.1,39.7 C8.7,43.5 10.3,50.5 15.7,50.0 C22.7,49.4 34.3,34.2 37.7,23.1"/></g><ellipse cx="4.1" cy="40.8" rx="1.6" ry="1" fill="#fff" transform="rotate(25 4.1 40.8)"/></svg><span class="vh">Doodle creatures</span></a><button class="btn infobtn" id="helpbtn" aria-expanded="false" aria-controls="help" aria-label="Info" title="Info">i</button></div></div>
+  <div class="top"><h1>Story dictation</h1><div class="topr"><button class="btn tipsbtn" id="tipsbtn" type="button" aria-haspopup="dialog" title="Tips for better stories"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 21h6M10 17h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Tips</button><a class="squig" href="doodle-creatures.html" title="Doodle creatures" aria-label="Doodle creatures"><svg viewBox="0 0 60 52" aria-hidden="true" focusable="false"><g fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8,40.6 C4.9,28.0 21.9,4.8 39.9,2.8 C40.8,11.0 38.3,18.7 37.7,23.1 C36.2,34.2 34.9,43.5 35.9,47.6 C39.3,46.6 46.7,32.7 47.5,25.4 C48.3,34.2 41.8,48.5 38.2,47.9 C45.2,45.1 51.4,37.3 57.2,35.0"/><path d="M4.9,41.2 C8.7,34.2 18.0,14.9 23.8,18.4 C25.8,24.2 16.5,37.3 12.1,39.7 C8.7,43.5 10.3,50.5 15.7,50.0 C22.7,49.4 34.3,34.2 37.7,23.1"/></g><ellipse cx="4.1" cy="40.8" rx="1.6" ry="1" fill="#fff" transform="rotate(25 4.1 40.8)"/></svg><span class="vh">Doodle creatures</span></a><button class="btn infobtn" id="helpbtn" aria-expanded="false" aria-controls="help" aria-label="Info" title="Info">i</button></div></div>
 
   <section class="panel helpbox" id="help" hidden aria-label="Info">
     <h2 style="margin-top:0">How this app works</h2>
@@ -402,6 +426,46 @@ details.pic summary{cursor:pointer;padding:8px 0;min-height:44px;display:flex;al
 </main>
 <div class="toast" id="status" role="status"></div>
 
+
+<dialog id="tipsdlg" aria-label="Tips for better stories">
+  <div class="tphead"><h2>Tips for better stories</h2><button class="btn primary" id="tpclose" type="button">Done</button></div>
+  <p class="tpsub">Keep what helps. Bring in tips from the internet (the app shortens them for you), or dictate or write your own notes.</p>
+
+  <div class="tpbox">
+    <h3>Your own note</h3>
+    <textarea id="tpnote" placeholder="Dictate or write something that would make your stories better..."></textarea>
+    <div class="row" style="margin:6px 0 0">
+      <button class="btn" id="tpmic" type="button">Start dictating</button>
+      <button class="btn primary" id="tpsavenote" type="button">Save my note</button>
+    </div>
+    <div class="tpstat" id="tpmicst" role="status"></div>
+  </div>
+
+  <div class="tpbox">
+    <h3>Get tips from the internet</h3>
+    <input class="fld" id="tpurl" type="url" inputmode="url" placeholder="Paste a web link here" autocomplete="off" autocapitalize="off">
+    <div class="row" style="margin:0 0 6px"><button class="btn primary" id="tpfetch" type="button">Download and shorten</button></div>
+    <label class="l" for="tptext" style="margin-top:4px">Or paste the text of an article, and the app shortens it</label>
+    <textarea id="tptext" placeholder="Paste an article or a long list of tips here..."></textarea>
+    <div class="row" style="margin:6px 0 0"><button class="btn" id="tpsum" type="button">Shorten this text</button></div>
+    <div class="tpstat" id="tpfst" role="status"></div>
+    <div id="tpprev" hidden>
+      <label class="l" for="tpprevta">Short version. Change it if you like, then save it.</label>
+      <textarea id="tpprevta" class="short"></textarea>
+      <div class="row" style="margin:6px 0 0"><button class="btn primary" id="tpsaveprev" type="button">Save these tips</button><button class="btn" id="tpdiscard" type="button">Discard</button></div>
+    </div>
+    <p class="tpstat" style="margin:6px 0 0">Links are fetched through a free reading service on the internet, so they need a connection. Only the short version is kept in this app.</p>
+  </div>
+
+  <h3 style="margin:14px 0 0">Your tips</h3>
+  <div class="tpchips" id="tpchips" role="group" aria-label="Show">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="web" aria-pressed="false">From the internet</button>
+    <button type="button" data-f="mine" aria-pressed="false">My notes</button>
+  </div>
+  <ul class="tplist" id="tplist"></ul>
+  <div class="row"><button class="btn" id="tpcopy" type="button">Copy all tips</button></div>
+</dialog>
 <script>
 (function(){
   var KEY='storyboard-v1';
@@ -1164,6 +1228,153 @@ var RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').match
   load();hydrate().then(function(){renderAll();afterLoad();gc()});
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
   try{if('scrollRestoration' in history)history.scrollRestoration='manual';window.scrollTo(0,0)}catch(e){}
+})();
+</script>
+
+<script>
+(function(){
+  var KEY='story-tips-v1';
+  var $=function(id){return document.getElementById(id)};
+  var SEED=[
+   ['Keep sentences simple and paragraphs short, and pick lively action words so each scene stays clear in a young reader\u2019s mind.','Writing tips, West Virginia Dept. of Education','https://wvde.us/wp-content/uploads/2024/02/Writingtips.pdf'],
+   ['Play with sound: repetition, a refrain that comes back, alliteration and sound words make a story fun to read aloud.','Writing tips, West Virginia Dept. of Education','https://wvde.us/wp-content/uploads/2024/02/Writingtips.pdf'],
+   ['Go carefully with flashbacks. They can confuse younger children.','Writing tips, West Virginia Dept. of Education','https://wvde.us/wp-content/uploads/2024/02/Writingtips.pdf'],
+   ['Do not preach. Let a character learn through what happens instead of telling the reader the lesson.','Alice Kuipers; Writer\u2019s Relief','https://www.alicekuipers.com/?p=388'],
+   ['Make every word count. A picture book is short, about 30 pages and roughly 500 words, so cut filler.','Dog Ear Publishing','https://dogearpublishing.net/wordpress/creating-picture-books-children.html'],
+   ['Let the main character solve the problem. Keep grown-ups in the background and let the reader feel the character\u2019s emotions along the way.','Dog Ear Publishing','https://dogearpublishing.net/wordpress/creating-picture-books-children.html'],
+   ['You are writing for the grown-up who reads aloud as well as for the child, so aim to delight both.','She Writes (Kate Jerome)','https://shewrites.com/writing-a-childrens-picture-book-5-tips-to-help-you-create-a-tiny-masterpiece/'],
+   ['Rhyme is optional and hard to get right. If you rhyme, keep the rhythm smooth and never bend the story just to make a rhyme.','Book Cave','https://bcd.mybookcave.com/authorpost/20-tips-writing-picture-book'],
+   ['Read your story aloud to children and families and listen to what they say.','Book Cave','https://bcd.mybookcave.com/authorpost/20-tips-writing-picture-book'],
+   ['Do not be afraid of repetition. Children enjoy it and it helps them join in.','DIYMFA (S.J. Rosson)','https://diymfa.com/writing/five-tips-writing-childrens-story/'],
+   ['Let the pictures tell part of the story. If every picture is much the same, it is more a story with pictures than a picture book.','Nigel Gray; Institute for Writers','https://www.nigelgray-author.com/?p=91'],
+   ['A good story looks simple but has hidden depth, so children want to hear it again and again.','Nigel Gray','https://www.nigelgray-author.com/?p=91']
+  ];
+  var T={seeded:0,tips:[]};
+  try{var r=localStorage.getItem(KEY);if(r){var d=JSON.parse(r);if(d&&Array.isArray(d.tips))T=d}}catch(e){}
+  if(!T.seeded){var now=Date.now();T.tips=SEED.map(function(x,i){return{id:'s'+i,text:x[0],src:x[1],url:x[2],kind:'web',t:now-i}}).concat(T.tips);T.seeded=1;save()}
+  var F='all';
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(T));return true}catch(e){stat('tpfst','Could not save. Storage may be full.');return false}}
+  function stat(id,m){var e=$(id);if(e)e.textContent=m||''}
+  function uid(){return 'u'+Date.now().toString(36)+Math.floor(Math.random()*1e4)}
+
+  function render(){
+    var ul=$('tplist');ul.innerHTML='';
+    var list=T.tips.filter(function(x){return F==='all'||x.kind===F});
+    if(!list.length){var li=document.createElement('li');li.className='tpstat';li.textContent=F==='mine'?'No notes of your own yet.':'Nothing here yet.';ul.appendChild(li)}
+    list.forEach(function(x){
+      var li=document.createElement('li');li.className='tpitem';
+      var p=document.createElement('p');p.textContent=x.text;li.appendChild(p);
+      var m=document.createElement('div');m.className='tpmeta';
+      var tag=document.createElement('span');tag.className='tptag';tag.textContent=x.kind==='mine'?'My note':'From the internet';m.appendChild(tag);
+      if(x.src||x.url){
+        if(x.url&&/^https?:\/\//.test(x.url)){var a=document.createElement('a');a.href=x.url;a.target='_blank';a.rel='noopener';a.textContent=x.src||'Source';m.appendChild(a)}
+        else{var sp=document.createElement('span');sp.textContent=x.src;m.appendChild(sp)}
+      }
+      var del=document.createElement('button');del.className='btn warn sp';del.type='button';del.textContent='Delete';
+      del.addEventListener('click',function(){if(!window.confirm('Delete this tip?'))return;T.tips=T.tips.filter(function(y){return y.id!==x.id});save();render()});
+      m.appendChild(del);li.appendChild(m);ul.appendChild(li);
+    });
+  }
+
+  // ---------- open / close ----------
+  var dlg=$('tipsdlg');
+  function stopMainMic(){var m=document.querySelector('button.btn.rec');if(m&&m.id!=='tpmic')m.click()}
+  $('tipsbtn').addEventListener('click',function(){stopMainMic();render();if(dlg.showModal){if(!dlg.open)dlg.showModal()}else dlg.setAttribute('open','');dlg.scrollTop=0});
+  function closeDlg(){stopDict();if(dlg.close&&dlg.open)dlg.close();else dlg.removeAttribute('open')}
+  $('tpclose').addEventListener('click',closeDlg);
+  dlg.addEventListener('close',stopDict);
+  Array.prototype.forEach.call($('tpchips').children,function(b){b.addEventListener('click',function(){F=b.dataset.f;Array.prototype.forEach.call($('tpchips').children,function(x){x.setAttribute('aria-pressed',String(x===b))});render()})});
+
+  // ---------- dictate or write my own note ----------
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,recOn=false;
+  function micBtn(){$('tpmic').textContent=recOn?'Stop dictating':'Start dictating';$('tpmic').className=recOn?'btn rec':'btn'}
+  function stopDict(){if(rec){var r=rec;rec=null;try{r.stop()}catch(e){}}recOn=false;micBtn();if(/^Listening/.test($('tpmicst').textContent))stat('tpmicst','')}
+  function tidy(t){return t.replace(/\s*\bnew paragraph\b[.,]?\s*/gi,'\n\n').replace(/\s*\bfull stop\b/gi,'.').replace(/\s*\bquestion mark\b/gi,'?').replace(/\s*\bexclamation (mark|point)\b/gi,'!').replace(/\s*\bcomma\b/gi,',').replace(/([.?!])\s+([a-z])/g,function(m,a,b){return a+' '+b.toUpperCase()})}
+  $('tpmic').addEventListener('click',function(){
+    if(recOn){stopDict();return}
+    if(!SR){stat('tpmicst','Dictation is not supported in this browser. Try Safari on iPhone or Chrome on Android.');return}
+    var ta=$('tpnote'),base=ta.value;if(base&&!/\s$/.test(base))base+=' ';
+    var r=new SR();r.lang=($('lang')&&$('lang').value)||'en-ZA';r.continuous=true;r.interimResults=true;
+    r.onresult=function(e){if(r!==rec)return;var fin='',tmp='';for(var i=0;i<e.results.length;i++){var t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=t;else tmp+=t}
+      var v=fin+tmp;if((!base.trim()||/[.?!]\s*$/.test(base))&&v)v=v.replace(/^(\s*)([a-z])/,function(m,a,b){return a+b.toUpperCase()});
+      ta.value=base+tidy(v);ta.scrollTop=ta.scrollHeight};
+    r.onerror=function(e){if(r!==rec)return;stat('tpmicst',(e.error==='not-allowed'||e.error==='service-not-allowed')?'The microphone is blocked. Allow it for this page and try again.':e.error==='network'?'Dictation needs an internet connection.':e.error==='no-speech'?'':'Dictation stopped: '+e.error+'.');if(e.error!=='no-speech'&&e.error!=='aborted'){rec=null;recOn=false;micBtn()}};
+    r.onend=function(){if(r!==rec)return;base=ta.value;if(base&&!/\s$/.test(base))base+=' ';try{r.start()}catch(x){rec=null;recOn=false;micBtn()}};
+    rec=r;try{r.start();recOn=true;micBtn();stat('tpmicst','Listening... speak your note.')}catch(x){rec=null;stat('tpmicst','Could not start the microphone.')}
+  });
+  $('tpsavenote').addEventListener('click',function(){
+    var v=$('tpnote').value.trim();if(!v){stat('tpmicst','Write or dictate a note first.');return}
+    stopDict();T.tips.unshift({id:uid(),text:v,src:'',url:'',kind:'mine',t:Date.now()});
+    if(save()){$('tpnote').value='';stat('tpmicst','Saved to your tips.');F='all';Array.prototype.forEach.call($('tpchips').children,function(x){x.setAttribute('aria-pressed',String(x.dataset.f==='all'))});render()}
+  });
+
+  // ---------- shorten an article ----------
+  var STOP=new Set('a an the and or but if then so of to in on at for with from by as is are was were be been being it its this that these those you your we our they their he she his her i me my not no do does did have has had will would can could should may might must about into over under than too very just also more most other some such only own same there here when where which who whom what how all any both each few'.split(' '));
+  var JUNK=/cookie|subscribe|newsletter|copyright|all rights reserved|sign up|click here|privacy policy|terms of|follow us|share this|read more|advertis|comment|login|log in|facebook|twitter|instagram|pinterest|whatsapp|email address|\bbuy\b|course catalog|affiliate|sponsored/i;
+  var ADVICE=/\b(use|avoid|don'?t|do not|never|always|should|must|try|keep|make|let|remember|tip|read|write|show|tell|focus|start|end|create|consider|ask|choose|cut|add|limit|aim|ensure|ideal|best|key|important|rhythm|repeat|rhyme|character|plot|story|reader|child|children|picture|illustrat|word)\w*/i;
+  function cleanText(t){return t.replace(/\r/g,'').replace(/!\[[^\]]*\]\([^)]*\)/g,' ').replace(/\[([^\]]*)\]\([^)]*\)/g,'$1').replace(/https?:\/\/\S+/g,' ').replace(/<[^>]+>/g,' ').replace(/[#*_`|>]+/g,' ').replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/[ \t]+/g,' ')}
+  function summarise(raw,n){
+    var text=cleanText(raw),lines=text.split(/\n+/),cands=[];
+    lines.forEach(function(ln){
+      ln=ln.trim();if(ln.length<35)return;
+      var bullet=/^(\d+[.)]|[-\u2022\u2013])\s/.test(ln);
+      var parts=ln.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g)||[ln];
+      parts.forEach(function(s){s=s.trim().replace(/^(\d+[.)]|[-\u2022\u2013])\s*/,'');var w=s.split(/\s+/).length;if(s.length<35||s.length>260||w<6||JUNK.test(s)||/^["\u201c]/.test(s)&&s.length<60)return;cands.push({s:s,b:bullet,i:cands.length})})
+    });
+    if(!cands.length)return[];
+    var f={};cands.forEach(function(c){c.w=c.s.toLowerCase().match(/[a-z\u00e0-\u00ff']+/g)||[];c.w.forEach(function(x){if(!STOP.has(x)&&x.length>2)f[x]=(f[x]||0)+1})});
+    cands.forEach(function(c){var sc=0;c.w.forEach(function(x){if(!STOP.has(x)&&x.length>2)sc+=f[x]});c.sc=sc/Math.sqrt(c.w.length+1)+(ADVICE.test(c.s)?2:0)+(c.b?1.5:0)+(/\b(you|your)\b/i.test(c.s)?.5:0)});
+    var seen={};
+    var top=cands.slice().sort(function(a,b){return b.sc-a.sc}).filter(function(c){var k=c.s.toLowerCase().slice(0,40);if(seen[k])return false;seen[k]=1;return true}).slice(0,n);
+    return top.sort(function(a,b){return a.i-b.i}).map(function(c){return c.s.replace(/\s+/g,' ')});
+  }
+  var pendSrc={src:'',url:''};
+  function showPrev(arr,src,url){
+    if(!arr.length){stat('tpfst','I could not find tips in that. Try pasting the text of the article instead.');return}
+    pendSrc={src:src||'',url:url||''};
+    $('tpprevta').value=arr.map(function(x){return '\u2022 '+x}).join('\n');
+    $('tpprev').hidden=false;stat('tpfst','Here is the short version.');
+    $('tpprevta').scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  $('tpsum').addEventListener('click',function(){
+    var v=$('tptext').value.trim();if(v.length<80){stat('tpfst','Paste a longer piece of text first.');return}
+    showPrev(summarise(v,6),'Pasted text','');
+  });
+  $('tpdiscard').addEventListener('click',function(){$('tpprev').hidden=true;$('tpprevta').value='';stat('tpfst','')});
+  $('tpsaveprev').addEventListener('click',function(){
+    var lines=$('tpprevta').value.split(/\n+/).map(function(x){return x.replace(/^\s*[\u2022\-*]\s*/,'').trim()}).filter(Boolean);
+    if(!lines.length){stat('tpfst','Nothing to save.');return}
+    var now=Date.now();
+    lines.slice().reverse().forEach(function(x,i){T.tips.unshift({id:uid()+i,text:x,src:pendSrc.src,url:pendSrc.url,kind:'web',t:now+i})});
+    if(save()){$('tpprev').hidden=true;$('tpprevta').value='';$('tptext').value='';$('tpurl').value='';stat('tpfst','Saved '+lines.length+(lines.length===1?' tip.':' tips.'));F='all';Array.prototype.forEach.call($('tpchips').children,function(x){x.setAttribute('aria-pressed',String(x.dataset.f==='all'))});render()}
+  });
+  function timeout(ms){var c=new AbortController();setTimeout(function(){c.abort()},ms);return c.signal}
+  function htmlToText(h){try{var d=new DOMParser().parseFromString(h,'text/html');['script','style','nav','footer','header','aside','form','noscript','svg'].forEach(function(t){Array.prototype.forEach.call(d.querySelectorAll(t),function(n){n.remove()})});var out=[];Array.prototype.forEach.call(d.querySelectorAll('h1,h2,h3,h4,p,li'),function(n){var t=(n.textContent||'').replace(/\s+/g,' ').trim();if(t)out.push(t)});return out.join('\n')}catch(e){return h}}
+  function grab(url){
+    return fetch(url,{signal:timeout(12000)}).then(function(r){if(!r.ok)throw 0;var ct=r.headers.get('content-type')||'';return r.text().then(function(t){return /html/i.test(ct)?htmlToText(t):t})})
+    .catch(function(){return fetch('https://r.jina.ai/'+url,{signal:timeout(25000),headers:{'Accept':'text/plain'}}).then(function(r){if(!r.ok)throw 0;return r.text()})});
+  }
+  function hostOf(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return u}}
+  $('tpfetch').addEventListener('click',function(){
+    var u=$('tpurl').value.trim();if(!u){stat('tpfst','Paste a web link first.');return}
+    if(!/^https?:\/\//i.test(u))u='https://'+u;
+    try{new URL(u)}catch(e){stat('tpfst','That does not look like a web link.');return}
+    var b=this;b.disabled=true;stat('tpfst','Downloading...');
+    grab(u).then(function(t){
+      b.disabled=false;
+      if(!t||t.length<200){stat('tpfst','That page gave me almost nothing. Paste the text of the article below instead.');return}
+      showPrev(summarise(t,6),hostOf(u),u);
+    }).catch(function(){b.disabled=false;stat('tpfst','Could not download that page. Check your internet, or paste the text of the article below.')});
+  });
+
+  // ---------- copy everything ----------
+  $('tpcopy').addEventListener('click',function(){
+    var text=T.tips.map(function(x){return '\u2022 '+x.text+(x.src?' ('+x.src+')':'')}).join('\n');
+    if(!text){stat('tpfst','No tips to copy yet.');return}
+    function fb(){var a=document.createElement('textarea');a.value=text;a.style.position='fixed';a.style.opacity='0';dlg.appendChild(a);a.select();try{document.execCommand('copy');stat('tpfst','Copied.')}catch(e){stat('tpfst','Could not copy.')}dlg.removeChild(a)}
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){stat('tpfst','Copied.')},fb);else fb();
+  });
+  render();
 })();
 </script>
 <script>if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})</script>
